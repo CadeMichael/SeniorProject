@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         cardColor: darkBlue,
         brightness: Brightness.dark,
       ),
-      home: const MyHomePage(title: '💀️ The Crypt 💀️'),
+      home: const MyHomePage(title: 'The Crypt 💀️'),
     );
   }
 }
