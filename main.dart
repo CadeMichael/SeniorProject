@@ -37,12 +37,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // determine body widget ie page to be rendered
   int _pageIndex = 0;
+  // list of body widgets
   static const List<Widget> _pageOption = [
-    Text("Contacts"),
-    Text("personal keys"),
-    Text("Encrypt/ decrypt"),
+    Text("Contacts"),           //index 0
+    Text("personal keys"),      //index 1
+    Text("Encrypt/ decrypt"),   //index 2
   ];
+  // @param index
+  // tells body of scaffold what widget to render
   void _changePage(int index) {
     setState(() {
       _pageIndex = index;
@@ -62,13 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: _pageOption.elementAt(_pageIndex),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: const FloatingActionButton(
         onPressed: null,
         backgroundColor: green,
         splashColor: cyan,
         hoverColor: cyan,
         tooltip: 'add',
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
       // Allows button to be over the Appbar
       // NAV BAR
