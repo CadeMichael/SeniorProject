@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'key_list.dart';
+import 'personal_key.dart';
+import 'crypt.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,9 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _pageIndex = 0;
   // list of body widgets
   static const List<Widget> _pageOption = [
-    Text("Contacts"),           //index 0
-    Text("personal keys"),      //index 1
-    Text("Encrypt/ decrypt"),   //index 2
+    KeyList(),                  //index 0
+    PersonalKey(),              //index 1
+    Crypt(),                    //index 2
   ];
   // @param index
   // tells body of scaffold what widget to render
