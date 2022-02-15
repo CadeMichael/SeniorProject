@@ -40,16 +40,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // determine body widget ie page to be rendered
+  /// determine body widget ie page to be rendered
   int _pageIndex = 0;
-  // list of body widgets
+  /// list of body widgets
   static const List<Widget> _pageOption = [
     KeyList(),                  //index 0
     PersonalKey(),              //index 1
     Crypt(),                    //index 2
   ];
-  // @param index
-  // tells body of scaffold what widget to render
+  /// [index] tells body of scaffold what widget to render
   void _changePage(int index) {
     setState(() {
       _pageIndex = index;
@@ -77,12 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'add',
         child: Icon(Icons.add),
       ),
-      // Allows button to be over the Appbar
-      // NAV BAR
-      // colors should be dark blue with three icons
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showUnselectedLabels: false, //hide icon labels
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(

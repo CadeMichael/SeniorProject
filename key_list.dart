@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-// @KeyList is a modified listview to hold saved public keys
-// It will need to get data from the Hive DB and update state
-// when searching for keys or adding/removing keys 
+/// @KeyList is a modified listview to hold saved public keys.
+///
+/// It will need to get data from the Hive DB and update state
+/// when searching for keys or adding/removing keys 
 class KeyList extends StatefulWidget {
   const KeyList({Key? key}) : super(key: key);
   @override
