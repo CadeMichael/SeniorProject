@@ -42,12 +42,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   /// determine body widget ie page to be rendered
   int _pageIndex = 0;
+
   /// list of body widgets
   static const List<Widget> _pageOption = [
-    KeyList(),                  //index 0
-    PersonalKey(),              //index 1
-    Crypt(),                    //index 2
+    KeyList(), //index 0
+    PersonalKey(), //index 1
+    Crypt(), //index 2
   ];
+
   /// [index] tells body of scaffold what widget to render
   void _changePage(int index) {
     setState(() {
@@ -67,15 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: _pageOption.elementAt(_pageIndex),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
-        backgroundColor: green,
-        splashColor: cyan,
-        hoverColor: cyan,
-        tooltip: 'add',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: null,
+      //   backgroundColor: green,
+      //   splashColor: cyan,
+      //   hoverColor: cyan,
+      //   tooltip: 'add',
+      //   child: const Icon(Icons.add),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false, //hide icon labels
