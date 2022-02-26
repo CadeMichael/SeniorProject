@@ -46,7 +46,7 @@ class _KeyListState extends State<KeyList> {
     return Stack(               // stack allows add button to float over SCSV
       children: [
         SingleChildScrollView(  // SCSV allows for scrolling and gives size to ExpansionPanel
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: ExpansionPanelList(
             expansionCallback: (int index, bool isExp) {
               setState(() {
@@ -84,8 +84,8 @@ class _KeyListState extends State<KeyList> {
         ),
         // add button
         Container(
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.bottomCenter,
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.bottomLeft,
           child: FloatingActionButton(
             onPressed: () {
               // need to create a dialog that pops up allowing a contact to be added
