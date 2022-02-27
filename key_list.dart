@@ -114,7 +114,7 @@ class _KeyListState extends State<KeyList> {
           padding: const EdgeInsets.all(16),
           alignment: Alignment.bottomLeft,
           child: Padding(
-            padding: const EdgeInsets.only(left: 36.0),
+            padding: const EdgeInsets.only(left: 16.0),
             child: FloatingActionButton(
               splashColor: lightPurp,
               onPressed: () {
