@@ -1,115 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:openpgp/openpgp.dart';
+
+import 'encrypt_decrypt.dart';
+import 'generate.dart';
+
+const passphrase = 'test';
+
+const publicKey = '''
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: openpgp-mobile
+
+xo0EYhESVwEEANJlqV1TdYvcKQbtMlW+L3cOIFT55YOVMfH0NMg9l0A8rSjJfir5
+QL27McbEk0K4jFa0ZLM1DgFkOvw35qcIZ3YVMlBFiIeJMqRQUB/qzyGNS4cqN5Tj
+TPK4zNVSjXF+Y0REA73/r9NGfG8vs7wEWOG/S6/eXomvcUQ4Htg4uMYLABEBAAHN
+FHRlc3QgPHRlc3RAdGVzdC5jb20+wqgEEwEIABwFAmIRElcJEE00V8y9gx9zAhsD
+AhkBAgsHAhUIAABmWAQABuX5cBVi0ZDZWdN4T0JELZF5S3Z8GUP7z8G53Mlum4ta
+TUlc7qKGISEH8Rich/hxGdQsKp4llxOFS26v5lnkLBsAFTNhC1zJHW4FUpbcCagY
+TxTAiAJV3GSBiCA2grWSD4BtN9XI6AdfrgUxAeWAK967vpiVTRo9NYvwV82jo0XO
+jQRiERJXAQQA8KwmN+I7VBHTm3CU9oAhW3J6Ed4by6mAawf2rf9fERrOPiVKtc6h
+vLFa2pl33mmVXk8C0bVEiiAP+1+QJHYPeztPN98AWGf51jGY4D2JoVtccou1469d
+FoDHO+/+peO/Wrt8nvVWjvqCsmS0GQwug9NM78po7vBiWQYBXYVaJfcAEQEAAcKf
+BBgBCAATBQJiERJXCRBNNFfMvYMfcwIbDAAAuq0EACbN1SNO8yCSd0lT1nxxYoA+
+3x5fbzMhDABOM2gbMBUOWFsxQAEJKCYR6fA6PVZ5RV4PwyXDItkeqvXpNPFXDjo4
+hXh+OPtI9VoUQF2cZTPd0sqshpF4h4FWkY6R+Hf2i4NGh/AjkEUlUf+uUHu5kXPK
+TxxR3oMX+RLGBeIwCsmS
+=iJPh
+-----END PGP PUBLIC KEY BLOCK-----
+''';
+const privateKey = '''
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+Version: openpgp-mobile
+
+xcFGBGIRElcBBADSZaldU3WL3CkG7TJVvi93DiBU+eWDlTHx9DTIPZdAPK0oyX4q
++UC9uzHGxJNCuIxWtGSzNQ4BZDr8N+anCGd2FTJQRYiHiTKkUFAf6s8hjUuHKjeU
+40zyuMzVUo1xfmNERAO9/6/TRnxvL7O8BFjhv0uv3l6Jr3FEOB7YOLjGCwARAQAB
+/gcDCOIqx2h9O0HoYF+nCd6JFTiQCf4Tsnfilf+SV4ib+w6oP88A6d0BaJGss+Ui
+7pI8tyH4LQ9bCNN+20dDd5AekETJ1JdzqlhR25bN0ZI5N0b1n5jywStGvFmxghJZ
+hAvjR+dHP3fclhpIzH+cHAK4qlqf+At3af4DWELE68AvmUDcZcf1v1zUx6OT0f9B
+hfpePxtJQwrcvsm2c06Y3Q4yF+A0iYfRii+0c6Vp4T+5Zj6WcPNxU5qr9lWelGMJ
+FWNKuaqDdovqeRQWDHTl7nt5oDmNl1AdVyDduQBBPzYr1HXBLlzG4iUzA1Zv/YGk
+sEXWYzCVe2IJxc4T1hr/KYNOPVQZxfknBx0ESZ4xlYFX0kg5Gi3LxA0C9Xq1LPLv
+BHxvdf+fIyvJhAs9Yl/5xNDxnWl3opvYz+BsZtSzB5LsGs+BDbZLiSyetYSUEb52
++hM9Uu08kV25j5IbqbknM5k4ghxyi7quWZoPOl7a5vDa/NKj7taqUuTNFHRlc3Qg
+PHRlc3RAdGVzdC5jb20+wqgEEwEIABwFAmIRElcJEE00V8y9gx9zAhsDAhkBAgsH
+AhUIAABmWAQABuX5cBVi0ZDZWdN4T0JELZF5S3Z8GUP7z8G53Mlum4taTUlc7qKG
+ISEH8Rich/hxGdQsKp4llxOFS26v5lnkLBsAFTNhC1zJHW4FUpbcCagYTxTAiAJV
+3GSBiCA2grWSD4BtN9XI6AdfrgUxAeWAK967vpiVTRo9NYvwV82jo0XHwRgEYhES
+VwEEAPCsJjfiO1QR05twlPaAIVtyehHeG8upgGsH9q3/XxEazj4lSrXOobyxWtqZ
+d95plV5PAtG1RIogD/tfkCR2D3s7TzffAFhn+dYxmOA9iaFbXHKLteOvXRaAxzvv
+/qXjv1q7fJ71Vo76grJktBkMLoPTTO/KaO7wYlkGAV2FWiX3ABEBAAEAA/0RFlfc
+Td6ieGWKurKI0c4MfRM3o4pbqlwovTcBYYkxYLLV7LXiNJp9GCZ4ML829k4ZlQiB
+NRp5qA8abM2CGTO+C9TJD2NwkMFiqf0qj3M69rM/gdeQEEy4D6/NW28gi7QMi+pg
+xqkIxDkP1KYaP5pwdqSBRp4aokt83VhpUGwCwQIA8df4LCBfy7f5kqEys14lmxyT
+EqkFhCWLLa7LRu2s6/IlGGqBONjkmKmtvTrGJ5D2U8d6IWlvawi0n741fZazlwIA
+/sKhPI7gclYHyiqKIQqdXvcusbcZfG+Whqe0ijq7hZshD+arL6eQ5QVOEIHpjJp3
+0QFPamveymQyaSnBtJzsoQIA8/jxCDCDR93oCEZjA9Aybna0Ot6N+ifcdjQQuQoR
+LaaU4kKD7GoUKJ/fZk3GpekO9EKCe/dNK6er1C8cHBydP5scwp8EGAEIABMFAmIR
+ElcJEE00V8y9gx9zAhsMAAC6rQQAJs3VI07zIJJ3SVPWfHFigD7fHl9vMyEMAE4z
+aBswFQ5YWzFAAQkoJhHp8Do9VnlFXg/DJcMi2R6q9ek08VcOOjiFeH44+0j1WhRA
+XZxlM93SyqyGkXiHgVaRjpH4d/aLg0aH8COQRSVR/65Qe7mRc8pPHFHegxf5EsYF
+4jAKyZI=
+=x08A
+-----END PGP PRIVATE KEY BLOCK-----
+''';
 
 void main() {
-  runApp(const MyApp());
+
+  runApp(new MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
+  KeyPair _defaultKeyPair = KeyPair(publicKey, privateKey);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_defaultKeyPair == null) {
+      return Container();
+    }
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('OpenPGP example app'),
+        ),
+        body: ListView(
+          key: Key('list'),
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            EncryptAndDecrypt(
+              title: "Encrypt And Decrypt",
+              keyPair: _defaultKeyPair,
+              key: Key("encrypt-decrypt"),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Generate(
+              title: "Generate",
+              key: Key("generate"),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
