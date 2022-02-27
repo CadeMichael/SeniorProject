@@ -66,7 +66,8 @@ XZxlM93SyqyGkXiHgVaRjpH4d/aLg0aH8COQRSVR/65Qe7mRc8pPHFHegxf5EsYF
 
 void main() {
 
-  runApp(new MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -116,3 +117,85 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+/*
+import 'package:flutter/material.dart';
+import 'package:openpgp/openpgp.dart';
+import "dart:developer";
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Testing generate key',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Generate key'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+
+        title: Text(widget.title),
+      ),
+      body: Center(
+
+        child: Column(
+
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Push the lower right button',
+            ),
+            Text(
+              'Read the log to see if key was generated',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          log("hi");
+          var keyOptions = KeyOptions()..rsaBits = 1024;
+          var keyPair = await OpenPGP.generate(
+              options: Options()
+                ..name = 'test'
+                ..email = 'test@test.com'
+                ..passphrase = "test"
+                ..keyOptions = keyOptions);
+
+          log(keyPair.publicKey);
+          log(keyPair.privateKey);
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+ */
