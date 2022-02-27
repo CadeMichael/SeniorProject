@@ -84,23 +84,19 @@ class _KeyListState extends State<KeyList> {
                             text: keyItem.publicKey,
                           ),
                         );
+                        null;
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          padding: const EdgeInsets.all(16),
-                          alignment: Alignment.centerRight,
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              _keys.removeWhere((ContactKey currentItem) =>
-                                  keyItem == currentItem);
-                            });
-                          },
-                        ),
-                      ],
+                    IconButton(
+                      padding: const EdgeInsets.all(16),
+                      alignment: Alignment.bottomRight,
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          _keys.removeWhere((ContactKey currentItem) =>
+                              keyItem == currentItem);
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -118,13 +114,17 @@ class _KeyListState extends State<KeyList> {
             child: FloatingActionButton(
               splashColor: lightPurp,
               onPressed: () {
+                // an error is thrown if a new key is Expanded while
+                // other keys are expanded
+                for (var item in _keys) {
+                  item.isExp = false;
+                }
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AddKeyDialog(keyFunc: addKey, title: "Add Contact");
                   },
                 );
-                // addKey(ContactKey(contactName: "test", publicKey: "12Test"));
               },
               child: const Icon(Icons.add),
             ),
