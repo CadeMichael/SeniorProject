@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 import 'package:openpgp/openpgp.dart';
-import 'package:seniorapp/main.dart';
+import 'main.dart';
 import 'buttons.dart';
+import 'input_widget.dart';
+import 'title_widget.dart';
 
 class EncryptAndDecrypt extends StatefulWidget {
   const EncryptAndDecrypt({
@@ -37,13 +40,17 @@ class _EncryptAndDecryptState extends State<EncryptAndDecrypt> {
               result: _encrypted,
               onPressed: (controller) async {
                 try {
+                  log(controller.text);
+                  log(widget.keyPair!.publicKey);
                   var encrypted = await OpenPGP.encrypt(
                     controller.text,
                     widget.keyPair!.publicKey,
                   );
+                  log("test2");
                   setState(() {
                     _encrypted = encrypted;
                   });
+                  log("test3");
                 } catch (e) {
                   print(e);
                 }
