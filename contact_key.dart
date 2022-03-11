@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+part 'contact_key.g.dart';
+
 /// ContactKey holds the public Keys of your contacts
 /// [contactName] is the contacts name 
 /// [publicKey] is their public key 

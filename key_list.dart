@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
 import 'package:the_crypt/key_list_dialog.dart';
+import 'package:the_crypt/contact_key.dart';
 
 /// @KeyList is a modified listview to hold saved public keys.
 ///
@@ -18,30 +21,54 @@ class KeyList extends StatefulWidget {
 /// ContactKey holds the public Keys of your contacts
 /// [contactName] is the contacts name
 /// [publicKey] is their public key
-class ContactKey {
-  // constructor
-  ContactKey({
-    required this.contactName,
-    required this.publicKey,
-    this.isExp = false,
-  });
-
-  // fields
-  String contactName;
-  String publicKey;
-  bool isExp;
-}
+// class ContactKey {
+//   // constructor
+//   ContactKey({
+//     required this.contactName,
+//     required this.publicKey,
+//     this.isExp = false,
+//   });
+//
+//   // fields
+//   String contactName;
+//   String publicKey;
+//   bool isExp;
+// }
 
 class _KeyListState extends State<KeyList> {
-  final List<ContactKey> _keys = [
-    ContactKey(contactName: "cade", publicKey: "123")
-  ];
 
-  void addKey(String name, String key) {
+  late final Box contactBox;
+
+  @override
+  void initState() {
+    super.initState();
+    contactBox = Hive.box("contacts");
+    // makeKeyList();
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
+  final List<ContactKey> _keys = []; // = [
+  //   ContactKey(contactName: "cade", publicKey: "123")
+  // ];
+
+  void addKey(String name, String key) async {
     ContactKey newContact = ContactKey(contactName: name, publicKey: key);
     setState(() {
-      _keys.add(newContact);
+      contactBox.add(newContact);
+      makeKeyList();
     });
+  }
+
+  void makeKeyList() {
+    if (contactBox.isNotEmpty) {
+      for (var i = 0; i < contactBox.length; i++) {
+        _keys.add(contactBox.getAt(i));
+      }
+    }
   }
 
   @override
@@ -93,8 +120,10 @@ class _KeyListState extends State<KeyList> {
                       icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
-                          _keys.removeWhere((ContactKey currentItem) =>
-                              keyItem == currentItem);
+                          // _keys.removeWhere((ContactKey currentItem) =>
+                          //     keyItem == currentItem);
+                          contactBox.delete(keyItem.key);
+                          makeKeyList();
                         });
                       },
                     ),

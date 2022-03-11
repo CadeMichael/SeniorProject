@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'key_list.dart';
 import 'personal_key.dart';
 import 'crypt.dart';
+import 'package:the_crypt/contact_key.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox<ContactKey>('contacts');
+  Hive.registerAdapter(ContactKeyAdapter());
   runApp(const MyApp());
 }
 
