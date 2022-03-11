@@ -7,8 +7,8 @@ import 'crypt.dart';
 import 'package:the_crypt/contact_key.dart';
 
 void main() async {
+  // instatiating hive 
   await Hive.initFlutter();
-  await Hive.openBox<ContactKey>('contacts');
   Hive.registerAdapter(ContactKeyAdapter());
   runApp(const MyApp());
 }
@@ -75,15 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: _pageOption.elementAt(_pageIndex),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: null,
-      //   backgroundColor: green,
-      //   splashColor: cyan,
-      //   hoverColor: cyan,
-      //   tooltip: 'add',
-      //   child: const Icon(Icons.add),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false, //hide icon labels

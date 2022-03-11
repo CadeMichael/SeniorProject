@@ -40,8 +40,9 @@ class _KeyListState extends State<KeyList> {
   late final Box contactBox;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
+    await Hive.openBox<ContactKey>('contacts');
     contactBox = Hive.box("contacts");
     // makeKeyList();
   }
