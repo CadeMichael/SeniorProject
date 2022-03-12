@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
 import 'package:the_crypt/key_list_dialog.dart';
+import 'package:the_crypt/contact_key.dart';
 
 /// @KeyList is a modified listview to hold saved public keys.
 ///
@@ -13,23 +14,6 @@ class KeyList extends StatefulWidget {
 
   @override
   State<KeyList> createState() => _KeyListState();
-}
-
-/// ContactKey holds the public Keys of your contacts
-/// [contactName] is the contacts name
-/// [publicKey] is their public key
-class ContactKey {
-  // constructor
-  ContactKey({
-    required this.contactName,
-    required this.publicKey,
-    this.isExp = false,
-  });
-
-  // fields
-  String contactName;
-  String publicKey;
-  bool isExp;
 }
 
 class _KeyListState extends State<KeyList> {
