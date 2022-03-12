@@ -1,22 +1,23 @@
-import 'package:hive/hive.dart';
+import 'package:objectbox/objectbox.dart';
 
 /// ContactKey holds the public Keys of your contacts
 /// [contactName] is the contacts name 
 /// [publicKey] is their public key 
-@HiveType(typeId: 0)
-class ContactKey extends HiveObject{
+@Entity()
+class ContactKey {
 
   // constructor 
   ContactKey({
+    this.id = 0,
     required this.contactName,
     required this.publicKey,
     this.isExp = false,
   });
 
-  // fields 
-  @HiveField(0)
+  // fields
+  int id;
   String contactName;
-  @HiveField(1)
   String publicKey;
+  @Transient()
   bool isExp;
 }

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'key_list.dart';
 import 'personal_key.dart';
 import 'crypt.dart';
+import 'object_box.dart';
 
-void main() {
+late ObjectBox objectbox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
+import 'package:the_crypt/contact_key.dart';
 import 'package:the_crypt/key_list_dialog.dart';
 
 /// @KeyList is a modified listview to hold saved public keys.
@@ -15,32 +16,17 @@ class KeyList extends StatefulWidget {
   State<KeyList> createState() => _KeyListState();
 }
 
-/// ContactKey holds the public Keys of your contacts
-/// [contactName] is the contacts name
-/// [publicKey] is their public key
-class ContactKey {
-  // constructor
-  ContactKey({
-    required this.contactName,
-    required this.publicKey,
-    this.isExp = false,
-  });
-
-  // fields
-  String contactName;
-  String publicKey;
-  bool isExp;
-}
-
 class _KeyListState extends State<KeyList> {
-  final List<ContactKey> _keys = [
-    ContactKey(contactName: "cade", publicKey: "123")
-  ];
+  static final store = objectbox.store;
+  static final box = store.box<ContactKey>();
+  static final que = box.query().build();
+  final List<ContactKey> _keys = que.find();
 
   void addKey(String name, String key) {
     ContactKey newContact = ContactKey(contactName: name, publicKey: key);
     setState(() {
       _keys.add(newContact);
+      box.put(newContact);
     });
   }
 
@@ -95,6 +81,7 @@ class _KeyListState extends State<KeyList> {
                         setState(() {
                           _keys.removeWhere((ContactKey currentItem) =>
                               keyItem == currentItem);
+                          box.remove(keyItem.id);
                         });
                       },
                     ),

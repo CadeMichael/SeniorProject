@@ -1,0 +1,76 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:5371344540900226701",
+      "lastPropertyId": "3:1296521141654057185",
+      "name": "ContactKey",
+      "properties": [
+        {
+          "id": "1:8486312830463174422",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7432376419818840998",
+          "name": "contactName",
+          "type": 9
+        },
+        {
+          "id": "3:1296521141654057185",
+          "name": "publicKey",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7639219115069628329",
+      "lastPropertyId": "5:1400710171395957353",
+      "name": "KeyPair",
+      "properties": [
+        {
+          "id": "1:1103958537094575037",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3621867043561509896",
+          "name": "keyName",
+          "type": 9
+        },
+        {
+          "id": "3:7928680379709334235",
+          "name": "publicKey",
+          "type": 9
+        },
+        {
+          "id": "4:3315446892328704535",
+          "name": "privateKey",
+          "type": 9
+        },
+        {
+          "id": "5:1400710171395957353",
+          "name": "password",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:7639219115069628329",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

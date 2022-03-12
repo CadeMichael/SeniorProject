@@ -1,14 +1,15 @@
-import 'package:hive/hive.dart';
+import 'package:objectbox/objectbox.dart';
 
 /// KeyPair holds the users personal key pairs
 /// [keyName] is name of the individual pair ie, personal or work
 /// [publicKey] is the public key
 /// [privateKey] is the public key
 /// [password] is the password for the private key
-@HiveType(typeId: 1)
-class KeyPair extends HiveObject{
+@Entity()
+class KeyPair {
   // constructor
   KeyPair({
+    required this.id,
     required this.keyName,
     required this.publicKey,
     required this.privateKey,
@@ -17,14 +18,12 @@ class KeyPair extends HiveObject{
   });
 
   // fields
-  @HiveField(0)
+  int id;
   String keyName;
-  @HiveField(1)
   String publicKey;
-  @HiveField(2)
   String privateKey;
-  @HiveField(3)
   String password;
+  @Transient()
   bool isExp;
 }
 
