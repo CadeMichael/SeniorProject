@@ -13,8 +13,16 @@ class Crypt extends StatefulWidget {
 }
 
 class _CryptState extends State<Crypt> {
+  // state determiners
   bool decrypt = false;
-  bool encrypt = false;
+  bool encrypt = true;
+
+  // text controllers
+  final eCon = TextEditingController();
+  final dCon = TextEditingController();
+
+  // resulting text
+  String resultText = '';
 
   void toggle(int i) {}
   @override
@@ -23,43 +31,81 @@ class _CryptState extends State<Crypt> {
       padding: const EdgeInsets.all(32.0),
       child: Column(
         children: [
-          Text('Encrypt', style: TextStyle(color: encrypt ? lightPurp : darkBlue),),
+          Text(
+            'Encrypt',
+            style: TextStyle(color: encrypt ? lightPurp : darkBlue),
+          ),
           Switch(
-              value: encrypt,
-              onChanged: (value) {
-                setState(() {
-                  encrypt = value;
-                  decrypt = !value;
-                });
-              },
-              activeColor: lightPurp,
-              inactiveThumbColor: darkBlue,
-              inactiveTrackColor: darkBlue,
-            ),
-          Text('Decrypt', style: TextStyle(color: decrypt ? lightPurp : darkBlue),),
+            value: encrypt,
+            onChanged: (value) {
+              setState(() {
+                encrypt = value;
+                decrypt = !value;
+                dCon.clear();
+                eCon.clear();
+              });
+            },
+            activeColor: lightPurp,
+            inactiveThumbColor: darkBlue,
+            inactiveTrackColor: darkBlue,
+          ),
+          Text(
+            'Decrypt',
+            style: TextStyle(color: decrypt ? lightPurp : darkBlue),
+          ),
           Switch(
-              value: decrypt,
-              onChanged: (value) {
-                setState(() {
-                  decrypt = value;
-                  encrypt = !value;
-                });
-              },
-              activeColor: lightPurp,
-              inactiveThumbColor: darkBlue,
-              inactiveTrackColor: darkBlue,
+            value: decrypt,
+            onChanged: (value) {
+              setState(() {
+                decrypt = value;
+                encrypt = !value;
+                dCon.clear();
+                eCon.clear();
+              });
+            },
+            activeColor: lightPurp,
+            inactiveThumbColor: darkBlue,
+            inactiveTrackColor: darkBlue,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 48.0, 16.0, 16.0),
+            child: TextField(
+              // controller depends on toggled
+              controller: encrypt ? eCon : dCon,
+              decoration: const InputDecoration(
+                hintText: "Secret message...",
+              ),
             ),
-          const Text('input feild coming'),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(64.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: lightPurp,
+              ),
+              padding: resultText != ''
+                  ? const EdgeInsets.all(16.0)
+                  : const EdgeInsets.all(0),
+                  child: Text(resultText, style: const TextStyle(color: darkBlue),),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.sync,
                 color: cyan,
                 size: 44,
               ),
               splashColor: lightPurp,
-              onPressed: null,
+              onPressed: () {
+                setState(() {
+                  resultText = encrypt
+                      ? eCon.text + ' but encrypted'
+                      : dCon.text + ' but decrypted';
+                });
+              },
             ),
           ),
         ],
