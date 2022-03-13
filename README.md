@@ -32,3 +32,8 @@ dev_dependencies:
 - to create the hive adapters run 
 - `flutter packages pub run build_runner build`
 
+## SplashScreen
+
+- using [native splash](https://pub.dev/packages/flutter_native_splash)
+- there is a `flutter_native_splash.yaml` in the root dir and this has the setup for the splash screen 
+- the splash image is in `assets/splash.png`
