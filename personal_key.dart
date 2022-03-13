@@ -15,19 +15,18 @@ class PersonalKey extends StatefulWidget {
 }
 
 class _PersonalKeyState extends State<PersonalKey> {
-  // final List<KeyPair> _keys = [
-  //   KeyPair(
-  //       keyName: "cade",
-  //       publicKey: "123",
-  //       privateKey: "priv123",
-  //       password: "pass123")
-  // ];
 
+  // in order to use objectbox components as initializers they must be static
+  // get the "store" from objectbox 
   static final store = objectbox.store;
+  // get a "box" of KeyPairs
   static final box = store.box<KeyPair>();
+  // query the keys, no params means all keys
   static final que = box.query().build();
+  // find() turns that query into a list of box<Type> in this case KeyPairs
   final List<KeyPair> _keys = que.find();
 
+  /// function to generate and add a new keypair 
   void newKey(String name) {
     KeyPair newPair = KeyPair(
       keyName: name,

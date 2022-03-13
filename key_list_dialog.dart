@@ -9,6 +9,7 @@ class AddKeyDialog extends StatefulWidget {
   }) : super(key: key);
 
   // fields
+  /// [title] is the name of the contact
   final String title;
   final Function keyFunc;
   @override
@@ -16,6 +17,7 @@ class AddKeyDialog extends StatefulWidget {
 }
 
 class _AddKeyDialogState extends State<AddKeyDialog> {
+  // controllers for text feild 
   final nameController = TextEditingController();
   final keyController = TextEditingController();
 
@@ -60,6 +62,7 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
               ),
               onPressed: () {
                 setState(() {
+                  // call the function from parent widget
                   widget.keyFunc(
                     nameController.text,
                     keyController.text,

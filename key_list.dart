@@ -17,11 +17,18 @@ class KeyList extends StatefulWidget {
 }
 
 class _KeyListState extends State<KeyList> {
+
+  // in order to use objectbox components as initializers they must be static
+  // get the "store" from objectbox 
   static final store = objectbox.store;
+  // get a "box" of ContactKeys
   static final box = store.box<ContactKey>();
+  // query the keys, no params means all keys
   static final que = box.query().build();
+  // find() turns that query into a list of box<Type> in this case ContactKeys
   final List<ContactKey> _keys = que.find();
 
+  /// function for adding a new contact key
   void addKey(String name, String key) {
     ContactKey newContact = ContactKey(contactName: name, publicKey: key);
     setState(() {

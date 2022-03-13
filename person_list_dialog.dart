@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:the_crypt/main.dart';
 
+/// dialog for adding key pairs 
 class AddPersonalKeyDialog extends StatefulWidget {
   const AddPersonalKeyDialog({
     Key? key,
-    required this.keyFunc,
-    required this.title,
+    required this.keyFunc,      
+    required this.title,       
   }) : super(key: key);
 
   // fields
+  /// [title] is the name of the key pair in the list 
   final String title;
+  /// [keyFunc] is the function for generating a key 
   final Function keyFunc;
   @override
   State<AddPersonalKeyDialog> createState() => _AddPersonalKeyDialogState();
 }
 
 class _AddPersonalKeyDialogState extends State<AddPersonalKeyDialog> {
+  // controllers for text feild
   final nameController = TextEditingController();
-  final keyController = TextEditingController();
 
   @override
   void dispose() {
@@ -51,9 +54,11 @@ class _AddPersonalKeyDialogState extends State<AddPersonalKeyDialog> {
                 Icons.add,
                 color: green,
               ),
+              // process of adding to DB 
               onPressed: () {
                 setState(() {
-                  widget.keyFunc(
+                  // call the function from parent widget
+                  widget.keyFunc( 
                     nameController.text,
                   );
                   Navigator.of(context).pop();
