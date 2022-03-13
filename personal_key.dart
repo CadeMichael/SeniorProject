@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
+import 'package:the_crypt/key_pair.dart';
+import 'package:the_crypt/person_list_dialog.dart';
 
 /// @Personalkey is a modified listview to hold a user's keys.
 ///
@@ -12,37 +14,32 @@ class PersonalKey extends StatefulWidget {
   State<PersonalKey> createState() => _PersonalKeyState();
 }
 
-/// KeyPair holds the users personal key pairs
-/// [keyName] is name of the individual pair ie, personal or work
-/// [publicKey] is the public key
-/// [privateKey] is the public key
-/// [password] is the password for the private key
-class KeyPair {
-  // constructor
-  KeyPair({
-    required this.keyName,
-    required this.publicKey,
-    required this.privateKey,
-    required this.password,
-    this.isExp = false,
-  });
-
-  // fields
-  String keyName;
-  String publicKey;
-  String privateKey;
-  String password;
-  bool isExp;
-}
-
 class _PersonalKeyState extends State<PersonalKey> {
-  final List<KeyPair> _keys = [
-    KeyPair(
-        keyName: "cade",
-        publicKey: "123",
-        privateKey: "priv123",
-        password: "pass123")
-  ];
+  // final List<KeyPair> _keys = [
+  //   KeyPair(
+  //       keyName: "cade",
+  //       publicKey: "123",
+  //       privateKey: "priv123",
+  //       password: "pass123")
+  // ];
+
+  static final store = objectbox.store;
+  static final box = store.box<KeyPair>();
+  static final que = box.query().build();
+  final List<KeyPair> _keys = que.find();
+
+  void newKey(String name) {
+    KeyPair newPair = KeyPair(
+      keyName: name,
+      publicKey: "dummy val",
+      privateKey: "dummy val",
+      password: "not sure if needed just here in case",
+    );
+    setState(() {
+      _keys.add(newPair);
+      box.put(newPair);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +80,7 @@ class _PersonalKeyState extends State<PersonalKey> {
                       setState(() {
                         _keys.removeWhere(
                             (KeyPair currentItem) => keyItem == currentItem);
+                          box.remove(keyItem.id);
                       });
                     }),
                 isExpanded: keyItem.isExp,
@@ -96,8 +94,18 @@ class _PersonalKeyState extends State<PersonalKey> {
           alignment: Alignment.bottomCenter,
           child: FloatingActionButton(
             onPressed: () {
-              // need to create a dialog that pops up allowing a contact to be added
-              null;
+              // an error is thrown if a new key is Expanded while
+              // other keys are expanded
+              for (var item in _keys) {
+                item.isExp = false;
+              }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddPersonalKeyDialog(
+                      keyFunc: newKey, title: "Generate new key");
+                },
+              );
             },
             child: const Icon(Icons.add),
           ),

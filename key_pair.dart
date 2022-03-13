@@ -9,7 +9,7 @@ import 'package:objectbox/objectbox.dart';
 class KeyPair {
   // constructor
   KeyPair({
-    required this.id,
+    this.id = 0,
     required this.keyName,
     required this.publicKey,
     required this.privateKey,
