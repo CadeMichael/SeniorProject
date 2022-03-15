@@ -44,7 +44,7 @@ class _KeyListState extends State<KeyList> {
       children: [
         SingleChildScrollView(
           // SCSV allows for scrolling and gives size to ExpansionPanel
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(16),
           child: ExpansionPanelList(
             expansionCallback: (int index, bool isExp) {
               setState(() {
