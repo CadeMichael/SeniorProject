@@ -29,8 +29,8 @@ dev_dependencies:
     sdk: flutter
 ```
 
-- to create the hive adapters run 
-- `flutter packages pub run build_runner build`
+- to create the objectbox_generator
+- flutter pub run build_runner build
 
 ## SplashScreen
 
