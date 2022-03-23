@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:the_crypt/main.dart';
+import 'package:fast_rsa/fast_rsa.dart';
 
 /// @Crypt the widget tree that handles both encryption and
 /// decryption.
@@ -23,13 +25,16 @@ class _CryptState extends State<Crypt> {
 
   // resulting text
   String resultText = '';
+  String privKey = '';
+  String pubkey = '';
+  String decryptTxt = '';
 
   void toggle(int i) {}
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
         child: Column(
           children: [
             Text(
@@ -88,8 +93,47 @@ class _CryptState extends State<Crypt> {
                 padding: resultText != ''
                     ? const EdgeInsets.all(16.0)
                     : const EdgeInsets.all(0),
-                    child: Text(resultText, style: const TextStyle(color: darkBlue),),
+                child: Text(
+                  privKey,
+                  style: const TextStyle(color: darkBlue),
+                ),
               ),
+            ),
+            FloatingActionButton(
+              child: const Icon(Icons.copy),
+              onPressed: () {
+                Clipboard.setData(
+                  ClipboardData(
+                    text: privKey,
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(64.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: lightPurp,
+                ),
+                padding: resultText != ''
+                    ? const EdgeInsets.all(16.0)
+                    : const EdgeInsets.all(0),
+                child: Text(
+                  resultText,
+                  style: const TextStyle(color: darkBlue),
+                ),
+              ),
+            ),
+            FloatingActionButton(
+              child: const Icon(Icons.copy),
+              onPressed: () {
+                Clipboard.setData(
+                  ClipboardData(
+                    text: resultText,
+                  ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -100,13 +144,55 @@ class _CryptState extends State<Crypt> {
                   size: 44,
                 ),
                 splashColor: lightPurp,
-                onPressed: () {
+                onPressed: () async {
+                  var keys = await RSA.generate(2048);
+                  var result =
+                      await RSA.encryptPKCS1v15(eCon.text, keys.publicKey);
                   setState(() {
-                    resultText = encrypt
-                        ? eCon.text + ' but encrypted'
-                        : dCon.text + ' but decrypted';
+                    // resultText = encrypt
+                    //     ? eCon.text + ' but encrypted'
+                    //     : dCon.text + ' but decrypted';
+                    resultText = result;
+                    privKey = keys.privateKey;
                   });
                 },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.sync,
+                  color: lightPurp,
+                  size: 44,
+                ),
+                splashColor: lightPurp,
+                onPressed: () async {
+                  var dc =
+                      await RSA.decryptPKCS1v15(resultText, privKey);
+                  setState(() {
+                    // resultText = encrypt
+                    //     ? eCon.text + ' but encrypted'
+                    //     : dCon.text + ' but decrypted';
+                    decryptTxt = dc;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(64.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: lightPurp,
+                ),
+                padding: resultText != ''
+                    ? const EdgeInsets.all(16.0)
+                    : const EdgeInsets.all(0),
+                child: Text(
+                  decryptTxt,
+                  style: const TextStyle(color: darkBlue),
+                ),
               ),
             ),
           ],
