@@ -17,7 +17,7 @@ class AddKeyDialog extends StatefulWidget {
 }
 
 class _AddKeyDialogState extends State<AddKeyDialog> {
-  // controllers for text feild 
+  // controllers for text feild
   final nameController = TextEditingController();
   final keyController = TextEditingController();
 
@@ -31,48 +31,52 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
   dialogBody(context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.title,
-              style: const TextStyle(color: lightPurp),
-            ),
-          ),
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              hintText: "name...",
-            ),
-          ),
-          TextField(
-            controller: keyController,
-            decoration: const InputDecoration(
-              hintText: "public key...",
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: IconButton(
-              icon: const Icon(
-                Icons.add,
-                color: green,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.title,
+                style: const TextStyle(color: lightPurp),
               ),
-              onPressed: () {
-                setState(() {
-                  // call the function from parent widget
-                  widget.keyFunc(
-                    nameController.text,
-                    keyController.text,
-                  );
-                  Navigator.of(context).pop();
-                });
-              },
             ),
-          ),
-        ],
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: "name...",
+              ),
+            ),
+            TextField(
+              controller: keyController,
+              decoration: const InputDecoration(
+                hintText: "public key...",
+              ),
+              maxLines: 11,
+              minLines: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add,
+                  color: green,
+                ),
+                onPressed: () {
+                  setState(() {
+                    // call the function from parent widget
+                    widget.keyFunc(
+                      nameController.text,
+                      keyController.text,
+                    );
+                    Navigator.of(context).pop();
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
