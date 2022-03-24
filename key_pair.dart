@@ -1,14 +1,14 @@
 import 'package:objectbox/objectbox.dart';
 
-/// KeyPair holds the users personal key pairs
+/// PersonalPair holds the users personal key pairs
 /// [keyName] is name of the individual pair ie, personal or work
 /// [publicKey] is the public key
 /// [privateKey] is the public key
 /// [password] is the password for the private key
 @Entity()
-class KeyPair {
+class PersonalPair {
   // constructor
-  KeyPair({
+  PersonalPair({
     this.id = 0,
     required this.keyName,
     required this.publicKey,

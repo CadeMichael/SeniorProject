@@ -17,9 +17,8 @@ class KeyList extends StatefulWidget {
 }
 
 class _KeyListState extends State<KeyList> {
-
   // in order to use objectbox components as initializers they must be static
-  // get the "store" from objectbox 
+  // get the "store" from objectbox
   static final store = objectbox.store;
   // get a "box" of ContactKeys
   static final box = store.box<ContactKey>();
@@ -103,25 +102,22 @@ class _KeyListState extends State<KeyList> {
         Container(
           padding: const EdgeInsets.all(16),
           alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: FloatingActionButton(
-              splashColor: lightPurp,
-              onPressed: () {
-                // an error is thrown if a new key is Expanded while
-                // other keys are expanded
-                for (var item in _keys) {
-                  item.isExp = false;
-                }
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AddKeyDialog(keyFunc: addKey, title: "Add Contact");
-                  },
-                );
-              },
-              child: const Icon(Icons.add),
-            ),
+          child: FloatingActionButton(
+            splashColor: lightPurp,
+            onPressed: () {
+              // an error is thrown if a new key is Expanded while
+              // other keys are expanded
+              for (var item in _keys) {
+                item.isExp = false;
+              }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddKeyDialog(keyFunc: addKey, title: "Add Contact");
+                },
+              );
+            },
+            child: const Icon(Icons.vpn_key),
           ),
         ),
       ],

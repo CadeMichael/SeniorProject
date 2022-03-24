@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
 import 'package:the_crypt/key_pair.dart';
 import 'package:the_crypt/person_list_dialog.dart';
+import 'package:fast_rsa/fast_rsa.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// @Personalkey is a modified listview to hold a user's keys.
 ///
@@ -19,19 +22,20 @@ class _PersonalKeyState extends State<PersonalKey> {
   // in order to use objectbox components as initializers they must be static
   // get the "store" from objectbox 
   static final store = objectbox.store;
-  // get a "box" of KeyPairs
-  static final box = store.box<KeyPair>();
+  // get a "box" of PersonalPairs
+  static final box = store.box<PersonalPair>();
   // query the keys, no params means all keys
   static final que = box.query().build();
-  // find() turns that query into a list of box<Type> in this case KeyPairs
-  final List<KeyPair> _keys = que.find();
+  // find() turns that query into a list of box<Type> in this case PersonalPairs
+  final List<PersonalPair> _keys = que.find();
 
   /// function to generate and add a new keypair 
-  void newKey(String name) {
-    KeyPair newPair = KeyPair(
+  void newKey(String name) async {
+    var keys = await RSA.generate(2048);
+    PersonalPair newPair = PersonalPair(
       keyName: name,
-      publicKey: "dummy val",
-      privateKey: "dummy val",
+      publicKey: keys.publicKey,
+      privateKey: keys.privateKey,
       password: "not sure if needed just here in case",
     );
     setState(() {
@@ -55,7 +59,7 @@ class _PersonalKeyState extends State<PersonalKey> {
               });
             },
             // map the keys to the ExpansionPanel
-            children: _keys.map<ExpansionPanel>((KeyPair keyItem) {
+            children: _keys.map<ExpansionPanel>((PersonalPair keyItem) {
               return ExpansionPanel(
                 backgroundColor: keyItem.isExp
                     ? darkBlue
@@ -70,18 +74,54 @@ class _PersonalKeyState extends State<PersonalKey> {
                   );
                 },
                 // expaded state
-                body: ListTile(
-                    title: Text(keyItem.privateKey),
-                    subtitle: const Text('detete keypair'),
-                    trailing: const Icon(Icons.delete),
-                    // delete function **will need to be changed to interact with db**
-                    onTap: () {
-                      setState(() {
-                        _keys.removeWhere(
-                            (KeyPair currentItem) => keyItem == currentItem);
+                body: Column(
+                  children: [
+                    ListTile(
+                      title: const Text("RSA Private Key"),
+                      subtitle: const Text('Copy Priv Key'),
+                      trailing: const Icon(Icons.copy),
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: keyItem.privateKey,
+                          ),
+                        );
+                        null;
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      child: QrImage(
+                        data: keyItem.publicKey,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    IconButton(
+                      padding: const EdgeInsets.all(16),
+                      alignment: Alignment.bottomRight,
+                      icon: const Icon(Icons.copy),
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: keyItem.publicKey,
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      padding: const EdgeInsets.all(16),
+                      alignment: Alignment.bottomRight,
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          _keys.removeWhere((PersonalPair currentItem) =>
+                              keyItem == currentItem);
                           box.remove(keyItem.id);
-                      });
-                    }),
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 isExpanded: keyItem.isExp,
               );
             }).toList(),
@@ -90,7 +130,7 @@ class _PersonalKeyState extends State<PersonalKey> {
         // add button
         Container(
           padding: const EdgeInsets.all(16),
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomLeft,
           child: FloatingActionButton(
             onPressed: () {
               // an error is thrown if a new key is Expanded while
@@ -106,7 +146,7 @@ class _PersonalKeyState extends State<PersonalKey> {
                 },
               );
             },
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.lock),
           ),
         ),
       ],

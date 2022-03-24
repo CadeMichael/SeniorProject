@@ -28,33 +28,33 @@
       "relations": []
     },
     {
-      "id": "2:7639219115069628329",
-      "lastPropertyId": "5:1400710171395957353",
-      "name": "KeyPair",
+      "id": "3:6681134045514637187",
+      "lastPropertyId": "5:1070395351360054420",
+      "name": "PersonalPair",
       "properties": [
         {
-          "id": "1:1103958537094575037",
+          "id": "1:5686218086859901031",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:3621867043561509896",
+          "id": "2:4903500750000162530",
           "name": "keyName",
           "type": 9
         },
         {
-          "id": "3:7928680379709334235",
+          "id": "3:6803091223247332506",
           "name": "publicKey",
           "type": 9
         },
         {
-          "id": "4:3315446892328704535",
+          "id": "4:6885674121514057358",
           "name": "privateKey",
           "type": 9
         },
         {
-          "id": "5:1400710171395957353",
+          "id": "5:1070395351360054420",
           "name": "password",
           "type": 9
         }
@@ -62,15 +62,23 @@
       "relations": []
     }
   ],
-  "lastEntityId": "2:7639219115069628329",
+  "lastEntityId": "3:6681134045514637187",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    7639219115069628329
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    1103958537094575037,
+    3621867043561509896,
+    7928680379709334235,
+    3315446892328704535,
+    1400710171395957353
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
