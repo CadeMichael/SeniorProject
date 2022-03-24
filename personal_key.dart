@@ -18,9 +18,8 @@ class PersonalKey extends StatefulWidget {
 }
 
 class _PersonalKeyState extends State<PersonalKey> {
-
   // in order to use objectbox components as initializers they must be static
-  // get the "store" from objectbox 
+  // get the "store" from objectbox
   static final store = objectbox.store;
   // get a "box" of PersonalPairs
   static final box = store.box<PersonalPair>();
@@ -29,7 +28,7 @@ class _PersonalKeyState extends State<PersonalKey> {
   // find() turns that query into a list of box<Type> in this case PersonalPairs
   final List<PersonalPair> _keys = que.find();
 
-  /// function to generate and add a new keypair 
+  /// function to generate and add a new keypair
   void newKey(String name) async {
     var keys = await RSA.generate(2048);
     PersonalPair newPair = PersonalPair(
@@ -90,23 +89,29 @@ class _PersonalKeyState extends State<PersonalKey> {
                       },
                     ),
                     Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(8),
                       child: QrImage(
                         data: keyItem.publicKey,
                         backgroundColor: Colors.white,
                       ),
                     ),
-                    IconButton(
-                      padding: const EdgeInsets.all(16),
-                      alignment: Alignment.bottomRight,
-                      icon: const Icon(Icons.copy),
-                      onPressed: () {
-                        Clipboard.setData(
-                          ClipboardData(
-                            text: keyItem.publicKey,
-                          ),
-                        );
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Copy Public Key"),
+                        IconButton(
+                          padding: const EdgeInsets.all(16),
+                          alignment: Alignment.bottomRight,
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(
+                              ClipboardData(
+                                text: keyItem.publicKey,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                     IconButton(
                       padding: const EdgeInsets.all(16),
