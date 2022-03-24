@@ -75,8 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
           style: const TextStyle(color: cyan),
         ),
       ),
-      body: Center(
-        child: _pageOption.elementAt(_pageIndex),
+      body: IndexedStack(
+        index: _pageIndex,
+        children: _pageOption,
       ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
