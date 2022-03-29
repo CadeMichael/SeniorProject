@@ -91,7 +91,7 @@ class _PersonalKeyState extends State<PersonalKey> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       child: QrImage(
-                        size: 200,
+                        size: 275,
                         data: keyItem.publicKey,
                         backgroundColor: Colors.white,
                       ),
