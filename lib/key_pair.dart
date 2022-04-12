@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 /// [privateKey] is the public key
 /// [password] is the password for the private key
 @HiveType(typeId: 1)
-class KeyPair extends HiveObject{
+class KeyPair extends HiveObject {
   // constructor
   KeyPair({
     required this.keyName,
@@ -27,4 +27,3 @@ class KeyPair extends HiveObject{
   String password;
   bool isExp;
 }
-
