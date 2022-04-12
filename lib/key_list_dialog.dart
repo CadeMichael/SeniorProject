@@ -53,9 +53,9 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
             ),
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const QRView(),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const QRViewExample(),
               ));
             },
             child: const Text('Scan QR Code'),

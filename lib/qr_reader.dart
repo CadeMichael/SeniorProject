@@ -1,43 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:developer';
 import 'dart:io';
 
-void main() => runApp(const MaterialApp(home: QRHome()));
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class QRHome extends StatelessWidget {
-  const QRHome({Key? key}) : super(key: key);
+void main() => runApp(const MaterialApp(home: MyHome()));
+
+class MyHome extends StatelessWidget {
+  const MyHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const QRView(),
+              builder: (context) => const QRViewExample(),
             ));
           },
-          child: const Text('Scan QR Code'),
+          child: const Text('qrView'),
         ),
       ),
     );
   }
 }
 
-class QRView extends StatefulWidget {
-  const QRView(
-      {Key? key,
-      void Function(QRViewController controller)? onQRViewCreated,
-      QrScannerOverlayShape? overlay,
-      void Function(dynamic ctrl, dynamic p)? onPermissionSet})
-      : super(key: key);
+class QRViewExample extends StatefulWidget {
+  const QRViewExample({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => QRViewState();
+  State<StatefulWidget> createState() => _QRViewExampleState();
 }
 
-class QRViewState extends State<QRView> {
+class _QRViewExampleState extends State<QRViewExample> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -58,7 +56,7 @@ class QRViewState extends State<QRView> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Expanded(flex: 4, child: buildQrView(context)),
+          Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
             flex: 1,
             child: FittedBox(
@@ -145,7 +143,7 @@ class QRViewState extends State<QRView> {
     );
   }
 
-  Widget buildQrView(BuildContext context) {
+  Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
@@ -155,18 +153,18 @@ class QRViewState extends State<QRView> {
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
       key: qrKey,
-      onQRViewCreated: onQRViewCreated,
+      onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
           borderColor: Colors.red,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
           cutOutSize: scanArea),
-      onPermissionSet: (ctrl, p) => onPermissionSet(context, ctrl, p),
+      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
 
-  void onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(QRViewController controller) {
     setState(() {
       this.controller = controller;
     });
@@ -177,8 +175,8 @@ class QRViewState extends State<QRView> {
     });
   }
 
-  void onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}onPermissionSet $p');
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('no Permission')),
