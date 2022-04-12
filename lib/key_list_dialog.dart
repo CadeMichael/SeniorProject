@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_crypt/main.dart';
+import 'package:the_crypt/qr_reader.dart';
 
 class AddKeyDialog extends StatefulWidget {
   const AddKeyDialog({
@@ -50,6 +51,14 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
             decoration: const InputDecoration(
               hintText: "public key...",
             ),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const QRView(),
+              ));
+            },
+            child: const Text('Scan QR Code'),
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
