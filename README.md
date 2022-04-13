@@ -23,6 +23,7 @@ dependencies:
   objectbox: ^1.4.1
   flutter_native_splash: ^1.3.2
   fast_rsa: ^3.4.6
+  qr_code_scanner: ^0.7.0
 
 dev_dependencies:
   build_runner: ^2.1.7
