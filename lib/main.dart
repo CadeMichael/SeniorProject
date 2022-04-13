@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_crypt/qr_reader.dart';
 import 'key_list.dart';
 import 'personal_key.dart';
 import 'crypt.dart';

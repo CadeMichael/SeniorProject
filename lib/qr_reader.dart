@@ -1,32 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
-void main() => runApp(const MaterialApp(home: MyHome()));
-
-class MyHome extends StatelessWidget {
-  const MyHome({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const QRViewExample(),
-            ));
-          },
-          child: const Text('qrView'),
-        ),
-      ),
-    );
-  }
-}
+import 'package:the_crypt/main.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({Key? key}) : super(key: key);
@@ -105,7 +82,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                                 }
                               },
                             )),
-                      )
+                      ),
                     ],
                   ),
                   Row(
@@ -134,6 +111,22 @@ class _QRViewExampleState extends State<QRViewExample> {
                       )
                     ],
                   ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const MyApp(
+                                  //data about QR Code
+                                  ),
+                            ));
+                          },
+                          child: const Text('Back'),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
