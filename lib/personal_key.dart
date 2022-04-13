@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
+import 'package:the_crypt/key_pair.dart';
+import 'package:the_crypt/person_list_dialog.dart';
+import 'package:fast_rsa/fast_rsa.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// @Personalkey is a modified listview to hold a user's keys.
 ///
@@ -12,37 +17,31 @@ class PersonalKey extends StatefulWidget {
   State<PersonalKey> createState() => _PersonalKeyState();
 }
 
-/// KeyPair holds the users personal key pairs
-/// [keyName] is name of the individual pair ie, personal or work
-/// [publicKey] is the public key
-/// [privateKey] is the public key
-/// [password] is the password for the private key
-class KeyPair {
-  // constructor
-  KeyPair({
-    required this.keyName,
-    required this.publicKey,
-    required this.privateKey,
-    required this.password,
-    this.isExp = false,
-  });
-
-  // fields
-  String keyName;
-  String publicKey;
-  String privateKey;
-  String password;
-  bool isExp;
-}
-
 class _PersonalKeyState extends State<PersonalKey> {
-  final List<KeyPair> _keys = [
-    KeyPair(
-        keyName: "cade",
-        publicKey: "123",
-        privateKey: "priv123",
-        password: "pass123")
-  ];
+  // in order to use objectbox components as initializers they must be static
+  // get the "store" from objectbox
+  static final store = objectbox.store;
+  // get a "box" of PersonalPairs
+  static final box = store.box<PersonalPair>();
+  // query the keys, no params means all keys
+  static final que = box.query().build();
+  // find() turns that query into a list of box<Type> in this case PersonalPairs
+  final List<PersonalPair> _keys = que.find();
+
+  /// function to generate and add a new keypair
+  void newKey(String name) async {
+    var keys = await RSA.generate(2048);
+    PersonalPair newPair = PersonalPair(
+      keyName: name,
+      publicKey: keys.publicKey,
+      privateKey: keys.privateKey,
+      password: "not sure if needed just here in case",
+    );
+    setState(() {
+      _keys.add(newPair);
+      box.put(newPair);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,7 @@ class _PersonalKeyState extends State<PersonalKey> {
               });
             },
             // map the keys to the ExpansionPanel
-            children: _keys.map<ExpansionPanel>((KeyPair keyItem) {
+            children: _keys.map<ExpansionPanel>((PersonalPair keyItem) {
               return ExpansionPanel(
                 backgroundColor: keyItem.isExp
                     ? darkBlue
@@ -74,17 +73,61 @@ class _PersonalKeyState extends State<PersonalKey> {
                   );
                 },
                 // expaded state
-                body: ListTile(
-                    title: Text(keyItem.privateKey),
-                    subtitle: const Text('detete keypair'),
-                    trailing: const Icon(Icons.delete),
-                    // delete function **will need to be changed to interact with db**
-                    onTap: () {
-                      setState(() {
-                        _keys.removeWhere(
-                            (KeyPair currentItem) => keyItem == currentItem);
-                      });
-                    }),
+                body: Column(
+                  children: [
+                    ListTile(
+                      title: const Text("RSA Private Key"),
+                      subtitle: const Text('Copy Priv Key'),
+                      trailing: const Icon(Icons.copy),
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: keyItem.privateKey,
+                          ),
+                        );
+                        null;
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      child: QrImage(
+                        size: 275,
+                        data: keyItem.publicKey,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Copy Public Key"),
+                        IconButton(
+                          padding: const EdgeInsets.all(16),
+                          alignment: Alignment.bottomRight,
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(
+                              ClipboardData(
+                                text: keyItem.publicKey,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      padding: const EdgeInsets.all(16),
+                      alignment: Alignment.bottomRight,
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          _keys.removeWhere((PersonalPair currentItem) =>
+                              keyItem == currentItem);
+                          box.remove(keyItem.id);
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 isExpanded: keyItem.isExp,
               );
             }).toList(),
@@ -93,13 +136,23 @@ class _PersonalKeyState extends State<PersonalKey> {
         // add button
         Container(
           padding: const EdgeInsets.all(16),
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomLeft,
           child: FloatingActionButton(
             onPressed: () {
-              // need to create a dialog that pops up allowing a contact to be added
-              null;
+              // an error is thrown if a new key is Expanded while
+              // other keys are expanded
+              for (var item in _keys) {
+                item.isExp = false;
+              }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddPersonalKeyDialog(
+                      keyFunc: newKey, title: "Generate new key");
+                },
+              );
             },
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.lock),
           ),
         ),
       ],

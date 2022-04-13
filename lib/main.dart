@@ -3,11 +3,19 @@ import 'package:the_crypt/qr_reader.dart';
 import 'key_list.dart';
 import 'personal_key.dart';
 import 'crypt.dart';
+import 'object_box.dart';
 
-void main() {
+// late allows objectbox to be accessed anywhere in the app
+// objectbox is the database that stores keys
+late ObjectBox objectbox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }
 
+// colors for the theme
 const Color cyan = Color(0xFF8be9fd);
 const Color lightPurp = Color(0xFFbd93f9);
 const Color darkBlue = Color(0xFF44475a);
@@ -32,6 +40,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// homepage handles the nav bar and scaffold
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -67,18 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
           style: const TextStyle(color: cyan),
         ),
       ),
-      body: Center(
-        child: _pageOption.elementAt(_pageIndex),
+      body: IndexedStack(
+        index: _pageIndex,
+        children: _pageOption,
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: null,
-      //   backgroundColor: green,
-      //   splashColor: cyan,
-      //   hoverColor: cyan,
-      //   tooltip: 'add',
-      //   child: const Icon(Icons.add),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false, //hide icon labels

@@ -51,3 +51,6 @@ app.*.map.json
 /lib/object_box.dart
 !.gitignore
 !README.md
+objectbox.g.dart
+generated_plugin_registrant.dart
+
