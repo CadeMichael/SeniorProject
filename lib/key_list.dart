@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_crypt/main.dart';
 import 'package:the_crypt/contact_key.dart';
 import 'package:the_crypt/key_list_dialog.dart';
-import 'package:the_crypt/contact_key.dart';
 
 /// @KeyList is a modified listview to hold saved public keys.
 ///
