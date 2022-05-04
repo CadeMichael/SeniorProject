@@ -44,3 +44,6 @@ dev_dependencies:
 ## Encryption 
 
 - using fast_rsa plugin for encryption. It is very performant (written in go) and integrates seamlessly. It is secure and perfect for peer to peer async encryption. However it is not ubiquitous and the size of keys it makes means that unless you have another app that uses RSA encryption of the same strength only the crypt can be used with these keys. With this in mind we will try to make an OpenPGP version aswell. 
+
+## Presentation 
+- all information about the final product can be found in the ![presentation](Presentation.pdf)
